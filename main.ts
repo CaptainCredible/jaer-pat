@@ -26,6 +26,7 @@ strip.showRainbow(1, 360)
 
 
 
+
 function noteOn(note: number, velocity: number, channel: number) {
     let midiMessage = pins.createBuffer(3);
     midiMessage.setNumber(NumberFormat.UInt8LE, 0, NOTE_ON | channel);
@@ -138,14 +139,21 @@ function handleOutput() {
     myNote = outPut;
 
     if (outPut < 10) {
+        let rBowPos = outPut * 30 + 1
+        let rBowLength = 30;
+        if(outPut == 1){
+            strip.showColor(NeoPixelColors.White);
+        } else {
+            strip.showRainbow(rBowPos, rBowPos + rBowLength);
+        }
+        
         noteOn(55, 127, outPut)
         //noteOff(55, 120, outPut)
     } else if(outPut < 13) {
         pins.digitalWritePin(pinArray[outPut - 10], 0);
         anOutputIsOn = true;
     }
-    let rBowPos = outPut*30
-    strip.showRainbow(rBowPos, rBowPos+30);
+    
 }
 
 function updateMCP23017() {
